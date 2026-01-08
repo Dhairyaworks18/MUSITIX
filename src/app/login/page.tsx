@@ -1,12 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 
 export default function LoginPage() {
+    return (
+        <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-[#0B0B0F] text-[#F4F4F5]"><Loader2 className="h-10 w-10 animate-spin text-[#A855F7]" /></div>}>
+            <LoginContent />
+        </Suspense>
+    );
+}
+
+function LoginContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const redirectUrl = searchParams.get("redirect") || "/";
