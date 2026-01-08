@@ -179,7 +179,7 @@ export async function POST(req: NextRequest) {
     } catch (error: any) {
         console.error("Razorpay API Error:", error);
         return NextResponse.json(
-            { error: "Internal Server Error", details: error.message },
+            { error: `Payment Failed: ${error.message}` },
             { status: 500 }
         );
     }
