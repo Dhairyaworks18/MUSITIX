@@ -177,9 +177,24 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ error: "Invalid action" }, { status: 400 });
     } catch (error: any) {
-        console.error("Razorpay API Error:", error);
+        console.error("Razorpay API Error Raw:", error);
+
+        // Robust error message extraction
+        let errorMessage = "Unknown error occurred";
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        } else if (typeof error === "string") {
+            errorMessage = error;
+        } else if (typeof error === "object") {
+            try {
+                errorMessage = JSON.stringify(error);
+            } catch {
+                errorMessage = "Circular or unstringifiable structure";
+            }
+        }
+
         return NextResponse.json(
-            { error: `Payment Failed: ${error.message}` },
+            { error: `Payment Failed: ${errorMessage}` },
             { status: 500 }
         );
     }
